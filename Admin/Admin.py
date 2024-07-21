@@ -76,7 +76,5 @@ def main():
             st.error(f"Error!! Please check logs. Error details: {error_msg}")
 
 
-
-
 if __name__ == "__main__":
     main()

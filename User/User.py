@@ -46,8 +46,9 @@ Context: {context}
 Question: {question}
 
 Provide a concise, factual answer to the question based on the given context. 
-If the information is not available in the context, simply state "The context does not provide information to answer this question.
-" Do not invent information or engage in role-play.
+If the information is not available in the context, simply stop generating content.
+" Do not invent information or engage in role-play.and don't write this thing Please let me know if you need any further assistance.
+Just stick to your answer you undersatndand are confident about .
 """
 
     PROMPT = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
