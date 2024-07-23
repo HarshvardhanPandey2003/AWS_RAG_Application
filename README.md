@@ -1,15 +1,14 @@
 # AWS_RAG_Application
 
-Welcome to the AWS RAG (Retrieval-Augmented Generation) Application! This project leverages Streamlit for an interactive user interface, Faiss for creating vector embeddings, and AWS services like S3 and DynamoDB for storage and feedback management.
+Welcome to the AWS_RAG_Application! This project is a Retrieval-Augmented Generation (RAG) application that uses Streamlit for uploading PDFs, creating vector embeddings using Faiss Database, storing the embeddings in an S3 Bucket, and then retrieving the embeddings to ask questions about the content.
 
 ## Features
 
-- Upload PDF documents
-- Generate vector embeddings using Faiss
-- Store embeddings in an S3 bucket
-- Retrieve and ask questions about the embeddings
-- Collect user feedback and store it in DynamoDB
-- Use feedback to improve responses
+- Upload PDF files
+- Create vector embeddings using Faiss Database
+- Store embeddings in AWS S3 Bucket
+- Retrieve embeddings for question answering
+- Simple and interactive user interface with Streamlit
 
 ## Table of Contents
 
@@ -43,19 +42,21 @@ Welcome to the AWS RAG (Retrieval-Augmented Generation) Application! This projec
     pip install -r requirements.txt
     ```
 
-5. Set up your AWS credentials and configure your environment. Ensure you have access to S3 and DynamoDB.
+5. Configure your AWS credentials for accessing S3.
 
 6. Start the Streamlit application:
     ```sh
     streamlit run Main.py
     ```
 
+7. Open your web browser and go to `http://localhost:8501/`.
+
 ## Usage
 
-1. **Upload PDF:** Users can upload PDF documents via the Streamlit interface.
-2. **Generate Embeddings:** The application generates vector embeddings for the uploaded PDF using Faiss and stores them in an S3 bucket.
-3. **Ask Questions:** Users can ask questions about the content of the uploaded PDFs. The application retrieves relevant embeddings and generates responses.
-4. **User Feedback:** Users can provide feedback on the responses. This feedback is stored in DynamoDB and used to improve future responses.
+- **Upload PDF:** Use the Streamlit interface to upload PDF files.
+- **Create Embeddings:** The application will automatically create vector embeddings for the uploaded PDF using Faiss Database.
+- **Store in S3:** The embeddings will be stored in the configured AWS S3 Bucket.
+- **Ask Questions:** Retrieve the embeddings and ask questions about the content using the interactive interface.
 
 ## Folder Structure
 
@@ -65,6 +66,8 @@ AWS_RAG_Application/
 │   └── Admin.py
 ├── User/
 │   └── User.py
+├── data/
+│   └── (uploaded PDFs and other data files)
 ├── Main.py
 ├── requirements.txt
 └── README.md
@@ -86,10 +89,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-Harshvardhan Pandey - [your.email@example.com](mailto:harshvardhanpandey2003@example.com)
+Harshvardhan Pandey -(mailto:harshvardhanpandey2003@gmail.com)
 
 Project Link: [https://github.com/HarshvardhanPandey2003/AWS_RAG_Application](https://github.com/HarshvardhanPandey2003/AWS_RAG_Application)
 
 ---
 
-Thank you for using our AWS RAG Application! We hope it meets your needs. If you have any questions or feedback, feel free to reach out.
+Thank you for using the AWS_RAG_Application! We hope it meets your needs. If you have any questions or feedback, feel free to reach out.
