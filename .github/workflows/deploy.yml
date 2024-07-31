@@ -43,8 +43,16 @@ jobs:
           # Wait for Docker to be ready
           timeout 60s bash -c "until sudo docker info; do sleep 1; done"
           
+          # Remove existing container if it exists
+          if sudo docker ps -a --format "{{.Names}}" | grep -q "^app_container$"; then
+            sudo docker stop app_container || true
+            sudo docker rm app_container || true
+          fi
+          
+          # Pull the new Docker image
           sudo docker pull harshvardhan2003/harsh_app1:latest
-          sudo docker stop $(sudo docker ps -a -q) || true
+          
+          # Run the new container
           sudo docker run -d --name app_container -p 80:8501 \
             -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
             -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
