@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
@@ -35,16 +35,26 @@ jobs:
       run: |
         echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
         ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} '
+          set -e
           docker pull harshvardhan2003/harsh_app1:latest
           docker stop $(docker ps -a -q) || true
-          docker run -d -p 80:8501 \
+          docker run -d --name app_container -p 80:8501 \
             -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
             -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
             -e S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }} \
             -e AWS_REGION=us-east-1 \
             harshvardhan2003/harsh_app1:latest
+
+          # Wait for the container to start and check its health
+          sleep 10
+          if [ "$(docker inspect -f {{.State.Running}} app_container)" = "true" ]; then
+            echo "Container is running"
+          else
+            echo "Container failed to start"
+            exit 1
+          fi
         '
 
-        '
-
-
+    - name: Verify deployment
+      run: |
+        echo "Deployment completed. Verify at http://${{ secrets.EC2_HOST }}"
