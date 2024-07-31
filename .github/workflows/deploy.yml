@@ -54,7 +54,10 @@ jobs:
             exit 1
           fi
         '
-
+    - name: Debug SSH
+      run: |
+        echo "Attempting to connect to ${{ secrets.EC2_HOST }}"
+        ssh -v -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} 'echo "SSH connection successful"'
     - name: Verify deployment
       run: |
         echo "Deployment completed. Verify at http://${{ secrets.EC2_HOST }}"
