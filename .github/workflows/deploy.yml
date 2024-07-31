@@ -36,9 +36,16 @@ jobs:
         echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
         ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} '
           set -e
-          docker pull harshvardhan2003/harsh_app1:latest
-          docker stop $(docker ps -a -q) || true
-          docker run -d --name app_container -p 80:8501 \
+          # Ensure Docker is running
+          sudo systemctl start docker
+          sudo systemctl enable docker
+          
+          # Wait for Docker to be ready
+          timeout 60s bash -c "until sudo docker info; do sleep 1; done"
+          
+          sudo docker pull harshvardhan2003/harsh_app1:latest
+          sudo docker stop $(sudo docker ps -a -q) || true
+          sudo docker run -d --name app_container -p 80:8501 \
             -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
             -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
             -e S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }} \
@@ -47,17 +54,27 @@ jobs:
 
           # Wait for the container to start and check its health
           sleep 10
-          if [ "$(docker inspect -f {{.State.Running}} app_container)" = "true" ]; then
+          if [ "$(sudo docker inspect -f {{.State.Running}} app_container)" = "true" ]; then
             echo "Container is running"
           else
             echo "Container failed to start"
             exit 1
           fi
         '
+
     - name: Debug SSH
+      env:
+        PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+        HOST: ${{ secrets.EC2_HOST }}
+        USER: ec2-user
       run: |
         echo "Attempting to connect to ${{ secrets.EC2_HOST }}"
-        ssh -v -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} 'echo "SSH connection successful"'
+        ssh -v -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} '
+          echo "SSH connection successful"
+          sudo systemctl status docker
+          sudo docker info
+        '
+
     - name: Verify deployment
       run: |
         echo "Deployment completed. Verify at http://${{ secrets.EC2_HOST }}"
