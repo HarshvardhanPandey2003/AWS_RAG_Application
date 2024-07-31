@@ -26,25 +26,23 @@ jobs:
         context: .
         push: true
         tags: harshvardhan2003/harsh_app1:latest
-        
+
     - name: Deploy to EC2
       env:
         PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
         HOST: ${{ secrets.EC2_HOST }}
         USER: ec2-user
       run: |
-        echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-        ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} '
+        echo "$PRIVATE_KEY" > private_key
+        chmod 600 private_key
+        ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << 'EOF'
           docker pull harshvardhan2003/harsh_app1:latest
-          docker stop $(docker ps -a -q) || true
+          docker stop $(docker ps -q) || true
+          docker rm $(docker ps -a -q) || true
           docker run -d -p 80:8501 \
             -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
             -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
             -e S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }} \
             -e AWS_REGION=us-east-1 \
             harshvardhan2003/harsh_app1:latest
-        '
-
-        '
-
-
+        EOF
