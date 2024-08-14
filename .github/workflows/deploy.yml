@@ -26,24 +26,30 @@ jobs:
         context: .
         push: true
         tags: harshvardhan2003/harsh_app1:latest
-        
+
     - name: Deploy to EC2
       env:
+# Disables strict host key checking to prevent SSH from prompting the user to verify the host key, which is useful for automated scripts.
         PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
         HOST: ${{ secrets.EC2_HOST }}
         USER: ec2-user
+# chmod 600 private_key: Changes the file permissions of private_key to ensure that only the owner can read and write it,
+# which is necessary for security and to comply with SSH   
       run: |
         echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
         ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} '
+# Ensures that the script will exit immediately if any command exits with a non-zero status.
           set -e
           # Ensure Docker is running
           sudo systemctl start docker
           sudo systemctl enable docker
+# with enable docker you can start the container 
           
           # Wait for Docker to be ready
           timeout 60s bash -c "until sudo docker info; do sleep 1; done"
           
-          # Stop and remove the existing container if it exists
+          # Stop and remove the existing container if it exists to avoid conflicts 
+          # because you can't run the old and new container together 
           sudo docker stop app_container || true
           sudo docker rm app_container || true
           
