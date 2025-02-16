@@ -1,7 +1,13 @@
-streamlit
+streamlit>=1.20  # Example version constraint
 pypdf
-langchain
+langchain>=0.1.0 # Example version constraint
 faiss-cpu
 boto3
 langchain_community
-awscli
+langchain-google-genai
+python-dotenv
+google-generativeai
+langchain_text_splitters
+tiktoken # Required for some LangChain features (e.g., text splitting, token counting)
+requests # For making HTTP requests, if needed for document loading
+awscli 

@@ -1,5 +1,3 @@
-# Admin.py
-
 import boto3
 import streamlit as st
 import os
@@ -16,9 +14,16 @@ from langchain_community.vectorstores import FAISS
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Get bucket name from environment variable
+BUCKET_NAME = os.getenv("S3_BUCKET_NAME")
+
+# Check if the bucket name is set
+if not BUCKET_NAME:
+    logger.error("S3_BUCKET_NAME environment variable is not set.")
+    raise ValueError("S3_BUCKET_NAME environment variable is not set.")
+
 # Creating an S3 Client
 s3_client = boto3.client('s3', region_name="us-east-1")
-BUCKET_NAME = os.getenv("S3_BUCKET_NAME", "pdfembeddings")
 
 bedrock_client = boto3.client(service_name="bedrock-runtime", region_name="us-east-1")
 bedrock_embeddings = BedrockEmbeddings(model_id="amazon.titan-embed-text-v1", client=bedrock_client)
@@ -42,8 +47,19 @@ def create_vector_store(request_id, documents):
     with tempfile.TemporaryDirectory() as temp_dir:
         vectorstore_faiss.save_local(index_name=file_name, folder_path=temp_dir)
         
-        s3_client.upload_file(Filename=os.path.join(temp_dir, f"{file_name}.faiss"), Bucket=BUCKET_NAME, Key="my_faiss.faiss")
-        s3_client.upload_file(Filename=os.path.join(temp_dir, f"{file_name}.pkl"), Bucket=BUCKET_NAME, Key="my_faiss.pkl")
+        faiss_file_path = os.path.join(temp_dir, f"{file_name}.faiss")
+        pkl_file_path = os.path.join(temp_dir, f"{file_name}.pkl")
+
+        try:
+            s3_client.upload_file(Filename=faiss_file_path, Bucket=BUCKET_NAME, Key="my_faiss.faiss")
+            logger.info(f"Uploaded {faiss_file_path} to s3://{BUCKET_NAME}/my_faiss.faiss")
+            s3_client.upload_file(Filename=pkl_file_path, Bucket=BUCKET_NAME, Key="my_faiss.pkl")
+            logger.info(f"Uploaded {pkl_file_path} to s3://{BUCKET_NAME}/my_faiss.pkl")
+
+        except Exception as e:
+            error_msg = f"Failed to upload files to S3: {str(e)}\n{traceback.format_exc()}"
+            logger.error(error_msg)
+            raise
 
 def main():
     st.write("This is admin state Chat with Pdf")
