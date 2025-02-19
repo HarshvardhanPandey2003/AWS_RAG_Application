@@ -3,7 +3,9 @@ import os
 import boto3
 from datetime import datetime, timedelta
 from typing import List, Dict
+from dotenv import load_dotenv
 
+load_dotenv()
 DYNAMODB_TABLE = os.getenv("DYNAMODB_TABLE")
 dynamodb = boto3.resource("dynamodb", region_name="us-east-1")
 table = dynamodb.Table(DYNAMODB_TABLE)
