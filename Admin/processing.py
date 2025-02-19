@@ -1,3 +1,4 @@
+# Admin/processing.py
 import boto3
 import os
 import uuid
@@ -58,7 +59,7 @@ def split_text(pages, chunk_size=1000, chunk_overlap=200):
 def create_vector_store(request_id, documents):
     """
     Create a FAISS vector store from the provided documents,
-    save it locally using FAISS’s built-in mechanism, and upload
+    save it locally using FAISS's built-in mechanism, and upload
     the index files (.faiss and .pkl) to S3 under the
     'vector_indexes/' prefix.
     

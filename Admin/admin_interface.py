@@ -1,3 +1,4 @@
+# Admin/admin_interface.py
 import streamlit as st
 import traceback
 import logging
@@ -18,6 +19,10 @@ def main():
             st.info("Processing the uploaded PDF file...")
             request_id, splitted_docs = process_pdf(upload_file)
             
+            # Save the request ID in the session state
+            st.session_state.request_id = request_id
+            st.success("Request ID saved in session state!")
+            
             st.write(f"Request ID: {request_id}")
             st.write(f"Total chunks extracted: {len(splitted_docs)}")
             
@@ -29,7 +34,6 @@ def main():
             error_msg = f"An error occurred: {str(e)}\n{traceback.format_exc()}"
             logger.error(error_msg)
             st.error("Error!! Please check logs for details.\n" + error_msg)
-
 
 if __name__ == "__main__":
     main()
