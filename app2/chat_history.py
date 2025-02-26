@@ -110,3 +110,4 @@ class ChatHistoryManager:
         except Exception as e:
             print(f"Error listing sessions: {str(e)}")
             return []
+        #

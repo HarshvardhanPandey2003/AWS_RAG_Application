@@ -85,3 +85,5 @@ class ChatInterface:
         except Exception as e:
             print(f"Error generating response: {str(e)}")
             return "I apologize, but I encountered an error processing your question. Please try again."
+
+#

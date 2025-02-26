@@ -16,3 +16,4 @@ GEMINI_API = os.getenv("GEMINI_API")
 
 # For MVP, we are not using DynamoDB; however, the variable is still available.
 DYNAMODB_TABLE = os.getenv("DYNAMODB_TABLE", "ChatSessions")
+#

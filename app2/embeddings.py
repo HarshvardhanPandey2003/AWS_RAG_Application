@@ -79,3 +79,4 @@ class EmbeddingsManager:
         except Exception as e:
             print(f"Error loading embeddings: {str(e)}")
             raise
+        #
