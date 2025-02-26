@@ -7,7 +7,7 @@ __pycache__/
 
 # Environment variables file
 .env
-
+app2/__pycache__/
 # Other
 *.log
 *.sqlite3
