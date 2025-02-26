@@ -9,5 +9,5 @@ COPY . .
 
 EXPOSE 8501
 
-CMD ["python3.11", "-m", "streamlit", "run", "Main.py", "--server.port=8501", "--server.address=0.0.0.0"]
+CMD ["python3.11", "-m", "streamlit", "run", "app2/main.py", "--server.port=8501", "--server.address=0.0.0.0"]
 
