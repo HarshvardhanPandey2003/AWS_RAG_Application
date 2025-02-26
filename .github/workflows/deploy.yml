@@ -26,7 +26,6 @@ jobs:
         context: .
         push: true
         tags: "harshvardhan2003/harsh_app1:latest"     
-# Disables strict host key checking to prevent SSH from prompting the user to verify the host key
     - name: Deploy to EC2
       env:
         PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
