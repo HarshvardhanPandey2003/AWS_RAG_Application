@@ -11,4 +11,4 @@ langchain_text_splitters
 tiktoken # Required for some LangChain features (e.g., text splitting, token counting)
 requests # For making HTTP requests, if needed for document loading
 awscli 
-PyPDF2==3.0.1
+PyPDF2
