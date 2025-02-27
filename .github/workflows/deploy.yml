@@ -76,3 +76,5 @@ jobs:
       - name: Verify deployment
         run: |
           echo "Deployment completed. Verify at http://${{ secrets.EC2_HOST }}"
+
+# In thi make sure to change the Ec2 Hostname after restarting the Instance
