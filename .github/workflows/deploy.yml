@@ -67,7 +67,7 @@ jobs:
           USER: ec2-user
         run: |
           echo "Attempting to connect to ${{ secrets.EC2_HOST }}"
-          ssh -v -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} '
+          ssh -vvv -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} '
             echo "SSH connection successful"
             sudo systemctl status docker
             sudo docker info
