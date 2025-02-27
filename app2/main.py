@@ -123,7 +123,7 @@ def main():
             with col2:
                 if st.button("🔄 Refresh"):
                     time.sleep(0.1)  # Prevent button spam
-                    st.experimental_rerun()
+                    st.rerun()
             
             # Display available sessions with error handling
             sessions = st.session_state.chat_history_manager.list_sessions()
@@ -141,7 +141,7 @@ def main():
                         ):
                             with st.spinner("Loading session..."):
                                 if load_chat_session(session_id):
-                                    st.experimental_rerun()
+                                    st.rerun()
                     except Exception as e:
                         st.error(f"Error displaying session: {str(e)}")
             else:
